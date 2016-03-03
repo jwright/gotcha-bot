@@ -1,5 +1,3 @@
-# factory = GotchaBot::Factory.startup(configuration)
-# factory.spawn(token).start!
 # class Bot
 #   include Behavior
 #   include Hook (channel_joined)
@@ -16,6 +14,7 @@
 # factory.on(:channel_joined) do |bot, message|
 # end
 
+require_relative "gotcha-bot/bot"
 require_relative "gotcha-bot/configuration"
 require_relative "gotcha-bot/factory"
 

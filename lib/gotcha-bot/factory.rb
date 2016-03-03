@@ -4,25 +4,32 @@ module GotchaBot
   class AlreadyStartedError < StandardError; end
 
   class Factory
-    def self.startup!(configuration={})
-      raise AlreadyStartedError if running?
+    class << self
+      def startup!(configuration={})
+        raise AlreadyStartedError if running?
 
-      GotchaBot.configure { |config| config.copy configuration }
-      instance
-    end
+        GotchaBot.configure { |config| config.copy configuration }
+        instance
+        begin; end until running?
+      end
 
-    def self.shutdown!
-      EM.add_shutdown_hook { @instance = nil }
-      EM.stop
-      begin; end until !running?
-    end
+      def shutdown!
+        EM.add_shutdown_hook { @instance = nil }
+        EM.stop
+        begin; end until !running?
+      end
 
-    def self.instance
-      @instance ||= new
-    end
+      def running?
+        EM.reactor_running?
+      end
 
-    def self.running?
-      EM.reactor_running?
+      def instance
+        @instance ||= new
+      end
+
+      def build(token)
+        Bot.new(token)
+      end
     end
 
     private
