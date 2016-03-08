@@ -10,6 +10,25 @@ RSpec.describe GotchaBot::Bot do
     end
   end
 
+  describe "#stop!" do
+    before { allow_any_instance_of(Slack::RealTime::Client).to receive(:start!) }
+
+    it "stops the communication with Slack" do
+      subject.start!
+      expect_any_instance_of(Slack::RealTime::Client).to \
+        receive(:stop!)
+      subject.stop!
+    end
+
+    context "when not yet started" do
+      it "does not stop the communication with Slack" do
+        expect_any_instance_of(Slack::RealTime::Client).to_not \
+          receive(:stop!)
+        subject.stop!
+      end
+    end
+  end
+
   describe "#restart!" do
     it "restarts the communication with Slack" do
       expect(subject).to receive(:start!)

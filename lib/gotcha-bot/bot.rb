@@ -6,11 +6,21 @@ module GotchaBot
 
     def initialize(token)
       @token = token
+      @client = nil
     end
 
     def start!
       @stopping = false
       client.start!
+    end
+
+    def started?
+      !@client.nil?
+    end
+
+    def stop!
+      @stopping = true
+      client.stop! if started?
     end
 
     def restart!(wait=1)
