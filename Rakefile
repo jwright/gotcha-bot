@@ -1,7 +1,18 @@
-require "active_record"
-require "yaml"
+task :environment do
+  if ENV["RACK_ENV"].nil?
+    ENV["RACK_ENV"] = "development"
+  end
+end
+
+desc "Start an irb session with GotchaBot loaded"
+task :console => :environment do
+  exec "irb -r ./lib/gotcha-bot"
+end
 
 namespace :db do
+  require "active_record"
+  require "yaml"
+
   environment     = ENV["RACK_ENV"] || "development"
   db_config       = YAML::load(File.open("config/database.yml"))[environment]
   db_config_admin = db_config.merge({ "database" => "postgres",
