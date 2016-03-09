@@ -37,6 +37,8 @@ RSpec.describe GotchaBot::Bot do
 
     context "when it encounters an error" do
       it "waits the specified number of seconds" do
+        subject.class.instance_variable_set("@logger", Logger.new("/dev/null"))
+        allow(subject.class.logger).to receive_message_chain(:error, :debug) {}
         call_count = 0
         allow(subject).to receive(:start!) do
           call_count += 1

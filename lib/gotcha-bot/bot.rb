@@ -1,7 +1,10 @@
 require "slack-ruby-client"
+require_relative "loggable"
 
 module GotchaBot
   class Bot
+    include Loggable
+
     attr_reader :token
 
     def initialize(token)
@@ -10,8 +13,10 @@ module GotchaBot
     end
 
     def start!
-      @stopping = false
-      client.start!
+      handle_exceptions do
+        @stopping = false
+        client.start!
+      end
     end
 
     def started?
@@ -27,6 +32,8 @@ module GotchaBot
       start!
     rescue StandardError => e
       sleep wait
+      logger.error "#{e.message}, reconnecting in #{wait} second(s)."
+      logger.debug e
       restart! [wait * 2, 60].min
     end
 
@@ -40,6 +47,29 @@ module GotchaBot
           restart! unless @stopping
         end
         client
+      end
+    end
+
+    def handle_exceptions
+      yield
+    rescue Slack::Web::Api::Error => e
+      logger.error e
+      handle_migration_in_process
+    rescue Faraday::Error::TimeoutError, Faraday::Error::ConnectionFailed,
+      Faraday::Error::SSLError => e
+      logger.error e
+      sleep 1 # ignore, try again
+    rescue StandardError => e
+      logger.error e
+      raise e
+    end
+
+    def handle_migration_in_process(e)
+      case e.message
+      when 'migration_in_progress'
+        sleep 1 # ignore, try again
+      else
+        raise e
       end
     end
   end

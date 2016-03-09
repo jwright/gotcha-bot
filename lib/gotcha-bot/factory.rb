@@ -1,9 +1,12 @@
 require "eventmachine"
+require_relative "loggable"
 
 module GotchaBot
   class AlreadyStartedError < StandardError; end
 
   class Factory
+    include Loggable
+
     LOCK = Mutex.new
     @bots = Hash.new
 
@@ -54,7 +57,7 @@ module GotchaBot
     def start!
       factory_thread = Thread.new do
         EM.run do
-          teams.each { |team| self.class.build(team.access_token).restart! }
+          teams.each { |team| self.class.build(team.access_token).start! }
         end
       end
       factory_thread.abort_on_exception = true
