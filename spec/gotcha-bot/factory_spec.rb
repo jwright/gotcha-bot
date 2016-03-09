@@ -1,4 +1,6 @@
 RSpec.describe GotchaBot::Factory do
+  before { allow(GotchaBot::Models::Team).to receive(:active).and_return [] }
+
   describe ".startup!" do
     after { described_class.shutdown! }
 
@@ -14,21 +16,35 @@ RSpec.describe GotchaBot::Factory do
         raise_error GotchaBot::AlreadyStartedError
     end
 
-    xit "starts the event loop to spawn existing bots"
+    it "starts the event loop to spawn existing bots" do
+      team = double(:team, access_token: "xoxp-ACCESS_TOKEN")
+      bot = double(:bot, restart!: nil)
+      allow(GotchaBot::Models::Team).to receive(:active).and_return [team]
+      expect(described_class).to \
+        receive(:build).with("xoxp-ACCESS_TOKEN").and_return bot
+      described_class.startup!
+    end
   end
 
   describe ".shutdown!" do
-    before do
-      described_class.startup!
-      described_class.shutdown!
-    end
+    before { described_class.startup! }
 
     it "stops the event loop" do
+      described_class.shutdown!
       expect(EM).to_not be_reactor_running
     end
 
     it "kills the instance" do
+      described_class.shutdown!
       expect(described_class.instance_variable_get("@instance")).to be_nil
+    end
+
+    it "shutsdown all existing bots" do
+      bot = double(:bot)
+      allow(described_class).to \
+        receive(:bots).and_return({ "xoxp-ACCESS_TOKEN" => bot })
+      expect(bot).to receive(:stop!)
+      described_class.shutdown!
     end
   end
 

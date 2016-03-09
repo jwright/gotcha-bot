@@ -4,7 +4,14 @@ module GotchaBot
   class AlreadyStartedError < StandardError; end
 
   class Factory
+    LOCK = Mutex.new
+    @bots = Hash.new
+
     class << self
+      def bots
+        @bots
+      end
+
       def startup!(configuration={})
         raise AlreadyStartedError if running?
 
@@ -14,10 +21,11 @@ module GotchaBot
       end
 
       def shutdown!
-        # TODO: Stop all the teams in the database
+        EM.next_tick { bots.each { |_token, bot| bot.stop! } }
         EM.add_shutdown_hook { @instance = nil }
         EM.stop
         begin; end until !running?
+        LOCK.synchronize { bots.clear }
       end
 
       def running?
@@ -29,7 +37,11 @@ module GotchaBot
       end
 
       def build(token)
-        Bot.new(token)
+        fail "Bot already started for #{token[0..8]}" if bots.key?(token)
+
+        bot = Bot.new(token)
+        LOCK.synchronize { bots[token] = bot }
+        bot
       end
     end
 
@@ -42,10 +54,14 @@ module GotchaBot
     def start!
       factory_thread = Thread.new do
         EM.run do
-          # TODO: Start all the teams in the database
+          teams.each { |team| self.class.build(team.access_token).restart! }
         end
       end
       factory_thread.abort_on_exception = true
+    end
+
+    def teams
+      Models::Team.active
     end
   end
 end
