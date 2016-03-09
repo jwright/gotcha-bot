@@ -16,6 +16,7 @@
 
 require_relative "gotcha-bot/core_ext"
 require_relative "gotcha-bot/loggable"
+require_relative "gotcha-bot/hooks"
 require_relative "gotcha-bot/bot"
 require_relative "gotcha-bot/configuration"
 require_relative "gotcha-bot/factory"

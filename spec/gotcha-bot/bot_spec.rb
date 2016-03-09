@@ -4,9 +4,14 @@ RSpec.describe GotchaBot::Bot do
 
   describe "#start!" do
     it "starts the communiction with Slack" do
-      expect_any_instance_of(Slack::RealTime::Client).to \
-        receive(:start!)
+      expect_any_instance_of(Slack::RealTime::Client).to receive(:start!)
       subject.start!
+    end
+
+    it "installs the hello hook" do
+      allow_any_instance_of(Slack::RealTime::Client).to receive(:start!)
+      subject.start!
+      expect(subject.hooks).to include(:hello)
     end
   end
 

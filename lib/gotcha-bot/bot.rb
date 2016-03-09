@@ -1,9 +1,9 @@
 require "slack-ruby-client"
-require_relative "loggable"
 
 module GotchaBot
   class Bot
     include Loggable
+    include Hooks::Hello
 
     attr_reader :token
 

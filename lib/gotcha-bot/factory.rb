@@ -1,5 +1,4 @@
 require "eventmachine"
-require_relative "loggable"
 
 module GotchaBot
   class AlreadyStartedError < StandardError; end
