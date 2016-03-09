@@ -57,7 +57,7 @@ module GotchaBot
     def start!
       factory_thread = Thread.new do
         EM.run do
-          teams.each { |team| self.class.build(team.access_token).start! }
+          teams.each { |team| self.class.build(team.bot.access_token).start! }
         end
       end
       factory_thread.abort_on_exception = true

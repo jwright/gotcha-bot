@@ -17,11 +17,11 @@ RSpec.describe GotchaBot::Factory do
     end
 
     it "starts the event loop to spawn existing bots" do
-      team = double(:team, access_token: "xoxp-ACCESS_TOKEN")
+      team = double(:team, bot: double(:team_bot, access_token: "xoxb-ACCESS_TOKEN"))
       bot = double(:bot, start!: nil)
       allow(GotchaBot::Models::Team).to receive(:active).and_return [team]
       expect(described_class).to \
-        receive(:build).with("xoxp-ACCESS_TOKEN").and_return bot
+        receive(:build).with("xoxb-ACCESS_TOKEN").and_return bot
       described_class.startup!
     end
   end
