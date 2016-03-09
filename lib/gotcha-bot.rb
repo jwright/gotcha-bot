@@ -17,6 +17,7 @@
 require_relative "gotcha-bot/bot"
 require_relative "gotcha-bot/configuration"
 require_relative "gotcha-bot/factory"
+require_relative "gotcha-bot/loggable"
 require_relative "gotcha-bot/models"
 
 module GotchaBot
