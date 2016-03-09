@@ -14,6 +14,7 @@ module GotchaBot
       end
 
       def shutdown!
+        # TODO: Stop all the teams in the database
         EM.add_shutdown_hook { @instance = nil }
         EM.stop
         begin; end until !running?
