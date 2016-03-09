@@ -3,6 +3,7 @@ FactoryGirl.define do
     access_token "xoxp-ACCESS_TOKEN"
     domain "sample"
     team_id "TSAMPLE"
+    association :bot
 
     trait :active do
       status nil

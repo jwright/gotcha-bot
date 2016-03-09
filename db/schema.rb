@@ -11,7 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160308225209) do
+ActiveRecord::Schema.define(version: 20160309111802) do
+
+  create_table "bots", force: :cascade do |t|
+    t.string   "bot_id"
+    t.string   "access_token"
+    t.string   "name"
+    t.integer  "team_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "bots", ["team_id"], name: "index_bots_on_team_id"
 
   create_table "teams", force: :cascade do |t|
     t.string   "access_token"
