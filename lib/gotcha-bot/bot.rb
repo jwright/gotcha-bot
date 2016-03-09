@@ -46,6 +46,7 @@ module GotchaBot
           @client = nil
           restart! unless @stopping
         end
+        hook_it_up(client)
         client
       end
     end
@@ -70,6 +71,18 @@ module GotchaBot
         sleep 1 # ignore, try again
       else
         raise e
+      end
+    end
+
+    def hook_it_up(client)
+      hooks.each do |hook|
+        client.on hook do |data|
+          begin
+            send hook, client, data
+          rescue StandardError => e
+            logger.error e
+          end
+        end
       end
     end
   end

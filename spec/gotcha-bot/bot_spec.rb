@@ -8,10 +8,22 @@ RSpec.describe GotchaBot::Bot do
       subject.start!
     end
 
-    it "installs the hello hook" do
-      allow_any_instance_of(Slack::RealTime::Client).to receive(:start!)
-      subject.start!
-      expect(subject.hooks).to include(:hello)
+    context "with a stubbed client" do
+      before { allow_any_instance_of(Slack::RealTime::Client).to receive(:start!) }
+
+      it "installs the hello hook" do
+        subject.start!
+        expect(subject.hooks).to include(:hello)
+      end
+
+      it "responds to the hello hook" do
+        data = { "type" => "hello" }
+        subject.start!
+        expect(subject).to receive(:hello).with(Slack::RealTime::Client, data)
+
+        client = subject.instance_variable_get "@client"
+        client.send :dispatch, double(:event, data: data.to_json)
+      end
     end
   end
 
