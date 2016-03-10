@@ -14,6 +14,7 @@
 # factory.on(:channel_joined) do |bot, message|
 # end
 
+require_relative "gotcha-bot/version"
 require_relative "gotcha-bot/core_ext"
 require_relative "gotcha-bot/loggable"
 require_relative "gotcha-bot/hooks"
