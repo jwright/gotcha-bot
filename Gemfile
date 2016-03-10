@@ -1,9 +1,6 @@
 source "http://rubygems.org"
 
-gem "activerecord"
-gem "faye-websocket"
-gem "rake"
-gem "slack-ruby-client"
+gemspec
 
 group :development, :test do
   gem "factory_girl"
