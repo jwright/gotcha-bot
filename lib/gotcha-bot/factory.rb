@@ -38,8 +38,12 @@ module GotchaBot
         @instance ||= new
       end
 
+      def built?(token)
+        bots.key?(token)
+      end
+
       def build(token)
-        fail "Bot already started for #{token[0..8]}" if bots.key?(token)
+        fail "Bot already built for #{token[0..8]}" if built?(token)
 
         bot = Bot.new(token)
         LOCK.synchronize { bots[token] = bot }

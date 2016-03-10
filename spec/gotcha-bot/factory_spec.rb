@@ -57,4 +57,15 @@ RSpec.describe GotchaBot::Factory do
       expect(bot).to_not be_nil
     end
   end
+
+  describe ".built?" do
+    it "returns true if the bot has been built" do
+      described_class.build("TOKEN")
+      expect(described_class).to be_built "TOKEN"
+    end
+
+    it "returns false if the bot has not been built" do
+      expect(described_class).to_not be_built "TOKEN"
+    end
+  end
 end
