@@ -1,3 +1,5 @@
+require "bundler/gem_tasks"
+
 task :environment do
   if ENV["RACK_ENV"].nil?
     ENV["RACK_ENV"] = "development"
