@@ -1,0 +1,7 @@
+Description:
+  Generates the necessary files to get you up and running with the Gotcha Bot
+
+Examples:
+  rails generate gotcha_bot:install
+
+    This will generate the core migration file for the teams and bots.

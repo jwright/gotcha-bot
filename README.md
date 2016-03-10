@@ -30,10 +30,8 @@ Gotcha: Boom. You are a sniper.
 
 ## INSTALLATION
 
-1. Create a new bot integration in Slack
-1. Deploy this bot to Heroku (or your choice of hosting)
-1. Update the `SLACK_API_TOKEN` to your API token you received from the integration
-1. Add this bot to your Slack team
+1. Install this gem (`gem install gotcha-bot`) or add to your `Gemfile`
+1. Run the installer (if Rails) (`bundle exec rails g gotcha_bot:install`)
 1. Enjoy the smiles
 
 ## RELEASING A NEW GEM
