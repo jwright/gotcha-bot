@@ -1,19 +1,3 @@
-# class Bot
-#   include Behavior
-#   include Hook (channel_joined)
-#
-#   command 'hello' do
-#   end
-#
-#   match // do
-#   end
-# end
-# factory.hears(/regex/, :direct_message, :direct_mention, :mention) do |bot, message|
-#   do something with the bot
-# end
-# factory.on(:channel_joined) do |bot, message|
-# end
-
 require_relative "gotcha-bot/version"
 require_relative "gotcha-bot/core_ext"
 require_relative "gotcha-bot/loggable"
