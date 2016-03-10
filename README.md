@@ -36,6 +36,13 @@ Gotcha: Boom. You are a sniper.
 1. Add this bot to your Slack team
 1. Enjoy the smiles
 
+## RELEASING A NEW GEM
+
+1. Bump the VERSION in `lib/gotcha-bot/version.rb`
+1. run `bundle exec rake build`
+1. Commit changes and push to GitHub
+1. run `bundle exec rake release`
+
 ## CONTRIBUTING
 
 1. Clone the repository `git clone https://github.com/jwright/gotcha-bot`
