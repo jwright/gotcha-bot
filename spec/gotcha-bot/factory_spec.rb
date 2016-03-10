@@ -59,6 +59,9 @@ RSpec.describe GotchaBot::Factory do
   end
 
   describe ".built?" do
+    before { described_class.startup! }
+    after { described_class.shutdown! }
+
     it "returns true if the bot has been built" do
       described_class.build("TOKEN")
       expect(described_class).to be_built "TOKEN"

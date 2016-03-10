@@ -4,12 +4,14 @@ RSpec.describe GotchaBot::Bot do
 
   describe "#start!" do
     it "starts the communiction with Slack" do
-      expect_any_instance_of(Slack::RealTime::Client).to receive(:start!)
+      expect_any_instance_of(Slack::RealTime::Client).to receive(:start_async)
       subject.start!
     end
 
     context "with a stubbed client" do
-      before { allow_any_instance_of(Slack::RealTime::Client).to receive(:start!) }
+      before do
+        allow_any_instance_of(Slack::RealTime::Client).to receive(:start_async)
+      end
 
       it "installs the hello hook" do
         subject.start!
@@ -28,7 +30,9 @@ RSpec.describe GotchaBot::Bot do
   end
 
   describe "#stop!" do
-    before { allow_any_instance_of(Slack::RealTime::Client).to receive(:start!) }
+    before do
+      allow_any_instance_of(Slack::RealTime::Client).to receive(:start_async)
+    end
 
     it "stops the communication with Slack" do
       subject.start!

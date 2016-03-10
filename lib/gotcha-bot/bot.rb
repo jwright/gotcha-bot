@@ -15,7 +15,7 @@ module GotchaBot
     def start!
       handle_exceptions do
         @stopping = false
-        client.start!
+        client.start_async
       end
     end
 
